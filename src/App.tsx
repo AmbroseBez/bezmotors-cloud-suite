@@ -6,30 +6,34 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import { useState } from "react";
 
-const queryClient = new QueryClient();
+const App = () => {
+  // Create a client inside the component
+  const [queryClient] = useState(() => new QueryClient());
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/inventory" element={<NotFound />} />
-          <Route path="/customers" element={<NotFound />} />
-          <Route path="/deals" element={<NotFound />} />
-          <Route path="/parts" element={<NotFound />} />
-          <Route path="/schedule" element={<NotFound />} />
-          <Route path="/reports" element={<NotFound />} />
-          <Route path="/analytics" element={<NotFound />} />
-          <Route path="/settings" element={<NotFound />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/inventory" element={<NotFound />} />
+            <Route path="/customers" element={<NotFound />} />
+            <Route path="/deals" element={<NotFound />} />
+            <Route path="/parts" element={<NotFound />} />
+            <Route path="/schedule" element={<NotFound />} />
+            <Route path="/reports" element={<NotFound />} />
+            <Route path="/analytics" element={<NotFound />} />
+            <Route path="/settings" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
