@@ -11,9 +11,9 @@ const Schedule = () => {
   const isMobile = useIsMobile();
   
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background overflow-hidden">
       <Sidebar />
-      <div className="flex-1 p-4 md:p-6 pl-4 md:pl-[calc(16rem+24px)] overflow-x-hidden">
+      <div className="flex-1 p-4 md:p-6 ml-16 md:ml-64 transition-all duration-300 overflow-y-auto">
         <div className="flex flex-col gap-4 md:gap-6 max-w-full">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <h1 className="text-2xl md:text-3xl font-bold">Service Schedule</h1>
