@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Car, BarChart3, Clipboard, Users, Settings, 
   Package, TrendingUp, Calendar, Home, Menu, X
@@ -13,10 +13,11 @@ type NavItemProps = {
   label: string;
   to: string;
   isActive: boolean;
+  onClick: () => void;
 };
 
-const NavItem = ({ icon: Icon, label, to, isActive }: NavItemProps) => (
-  <Link to={to} className="w-full">
+const NavItem = ({ icon: Icon, label, to, isActive, onClick }: NavItemProps) => (
+  <Link to={to} className="w-full" onClick={onClick}>
     <Button
       variant="ghost"
       className={cn(
@@ -33,10 +34,16 @@ const NavItem = ({ icon: Icon, label, to, isActive }: NavItemProps) => (
 );
 
 export function Sidebar() {
-  const [collapsed, setCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(true);
   const location = useLocation();
   
   const toggleSidebar = () => setCollapsed(!collapsed);
+  
+  const handleNavigation = () => {
+    if (!collapsed) {
+      setCollapsed(true);
+    }
+  };
   
   const navItems = [
     { icon: Home, label: 'Dashboard', to: '/' },
@@ -83,6 +90,7 @@ export function Sidebar() {
               label={collapsed ? "" : item.label}
               to={item.to}
               isActive={location.pathname === item.to}
+              onClick={handleNavigation}
             />
           ))}
         </nav>
@@ -94,6 +102,7 @@ export function Sidebar() {
           label={collapsed ? "" : "Settings"}
           to="/settings"
           isActive={location.pathname === '/settings'}
+          onClick={handleNavigation}
         />
       </div>
     </div>
