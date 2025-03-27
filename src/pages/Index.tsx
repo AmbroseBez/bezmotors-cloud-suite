@@ -8,6 +8,7 @@ import { Car, DollarSign, Users, TrendingUp, Search, Bell, Filter, Plus } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Mock data
 const salesData = [
@@ -61,23 +62,25 @@ const vehicles = [
 ];
 
 const Index = () => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="flex min-h-screen bg-background">
+    <div className="flex min-h-screen bg-background overflow-hidden">
       <Sidebar />
       
-      <div className="flex-1 ml-64 p-8">
-        <header className="flex justify-between items-center mb-8">
+      <div className="flex-1 p-4 md:p-6 ml-16 md:ml-64 transition-all duration-300 overflow-y-auto">
+        <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
           <div>
-            <h1 className="text-3xl font-bold mb-1">Dashboard</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-1">Dashboard</h1>
             <p className="text-muted-foreground">Welcome back to BezMegaMotors Management System</p>
           </div>
           
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex w-full md:w-auto items-center gap-4">
+            <div className="relative flex-1 md:flex-initial">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input 
                 placeholder="Search..." 
-                className="pl-9 w-64"
+                className="pl-9 w-full md:w-64"
               />
             </div>
             
@@ -87,7 +90,7 @@ const Index = () => {
           </div>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
           <StatCard 
             title="Total Vehicles" 
             value="124"
@@ -97,7 +100,7 @@ const Index = () => {
           />
           <StatCard 
             title="Monthly Revenue" 
-            value="$258,430"
+            value="R258,430"
             icon={<DollarSign size={24} className="text-primary" />}
             change={{ value: 8.5, isPositive: true }}
             className="animate-slide-in [animation-delay:200ms]"
@@ -118,7 +121,7 @@ const Index = () => {
           />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
           <div className="lg:col-span-2">
             <Chart 
               title="Monthly Sales Performance" 
@@ -138,14 +141,14 @@ const Index = () => {
         </div>
         
         <div>
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-semibold">Recent Inventory</h2>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+            <h2 className="text-xl md:text-2xl font-semibold">Recent Inventory</h2>
+            <div className="flex gap-2 w-full md:w-auto">
+              <Button variant="outline" size="sm" className="flex-1 md:flex-initial">
                 <Filter size={16} className="mr-2" />
                 Filter
               </Button>
-              <Button size="sm">
+              <Button size="sm" className="flex-1 md:flex-initial">
                 <Plus size={16} className="mr-2" />
                 Add Vehicle
               </Button>
@@ -153,7 +156,7 @@ const Index = () => {
           </div>
           
           <Tabs defaultValue="all">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 w-full overflow-x-auto">
               <TabsTrigger value="all">All Vehicles</TabsTrigger>
               <TabsTrigger value="in-stock">In Stock</TabsTrigger>
               <TabsTrigger value="reserved">Reserved</TabsTrigger>
@@ -161,7 +164,7 @@ const Index = () => {
             </TabsList>
             
             <TabsContent value="all" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {vehicles.map((vehicle, index) => (
                   <VehicleCard 
                     key={vehicle.id} 
@@ -173,7 +176,7 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="in-stock" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {vehicles
                   .filter(v => v.status === 'In Stock')
                   .map((vehicle, index) => (
@@ -188,7 +191,7 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="reserved" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {vehicles
                   .filter(v => v.status === 'Reserved')
                   .map((vehicle, index) => (
@@ -203,7 +206,7 @@ const Index = () => {
             </TabsContent>
             
             <TabsContent value="sold" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 {vehicles
                   .filter(v => v.status === 'Sold')
                   .map((vehicle, index) => (
