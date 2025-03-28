@@ -164,7 +164,7 @@ const Parts = () => {
                     <SelectValue placeholder="Filter by vehicle" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Vehicles</SelectItem>
+                    <SelectItem value="all">All Vehicles</SelectItem>
                     {vehicles.map(vehicle => (
                       <SelectItem key={vehicle.id} value={vehicle.id}>
                         {vehicle.title}
