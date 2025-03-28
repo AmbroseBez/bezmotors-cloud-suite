@@ -2,8 +2,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Car, BarChart3, Clipboard, Users, Settings, 
-  Package, TrendingUp, Calendar, Home, Menu, X
+  Car, BarChart3, Clipboard, Settings, 
+  Package, TrendingUp, Calendar, Home, Menu, X, DollarSign
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -48,10 +48,10 @@ export function Sidebar() {
   const navItems = [
     { icon: Home, label: 'Dashboard', to: '/' },
     { icon: Car, label: 'Inventory', to: '/inventory' },
-    { icon: Users, label: 'Customers', to: '/customers' },
     { icon: Clipboard, label: 'Deals', to: '/deals' },
     { icon: Package, label: 'Parts', to: '/parts' },
     { icon: Calendar, label: 'Schedule', to: '/schedule' },
+    { icon: DollarSign, label: 'Advertising', to: '/advertising' },
     { icon: BarChart3, label: 'Reports', to: '/reports' },
     { icon: TrendingUp, label: 'Analytics', to: '/analytics' },
   ];

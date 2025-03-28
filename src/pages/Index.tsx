@@ -4,13 +4,13 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { VehicleCard } from '@/components/dashboard/VehicleCard';
 import { Chart } from '@/components/dashboard/Chart';
-import { Car, DollarSign, Users, TrendingUp, Search, Bell, Filter, Plus } from 'lucide-react';
+import { Car, DollarSign, Package, TrendingUp, Search, Bell, Filter, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Mock data
+// Reset mock data with generic placeholders
 const salesData = [
   { name: 'Jan', sales: 30 },
   { name: 'Feb', sales: 45 },
@@ -28,11 +28,12 @@ const inventoryData = [
   { name: 'Luxury', count: 7 },
 ];
 
+// Generic vehicle data without specific images
 const vehicles = [
   {
     id: 'VIN-12345',
     title: '2022 Tesla Model 3',
-    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80',
+    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
     price: 42990,
     year: 2022,
     mileage: 12500,
@@ -42,7 +43,7 @@ const vehicles = [
   {
     id: 'VIN-67890',
     title: '2023 BMW X5',
-    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
     price: 65750,
     year: 2023,
     mileage: 8200,
@@ -52,13 +53,22 @@ const vehicles = [
   {
     id: 'VIN-54321',
     title: '2021 Ford F-150',
-    image: 'https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
     price: 48500,
     year: 2021,
     mileage: 15800,
     fuelType: 'Diesel',
     status: 'Sold' as const,
   },
+];
+
+// Add advertising cost data
+const advertisingData = [
+  { name: 'Online', cost: 2500 },
+  { name: 'Social Media', cost: 1800 },
+  { name: 'Print', cost: 950 },
+  { name: 'TV/Radio', cost: 3200 },
+  { name: 'Events', cost: 1200 },
 ];
 
 const Index = () => {
@@ -106,15 +116,15 @@ const Index = () => {
             className="animate-slide-in [animation-delay:200ms]"
           />
           <StatCard 
-            title="Active Customers" 
-            value="87"
-            icon={<Users size={24} className="text-primary" />}
+            title="Parts Inventory" 
+            value="1,245"
+            icon={<Package size={24} className="text-primary" />}
             change={{ value: 5, isPositive: true }}
             className="animate-slide-in [animation-delay:300ms]"
           />
           <StatCard 
-            title="Deals Closed" 
-            value="17"
+            title="Ad Spend" 
+            value="R9,650"
             icon={<TrendingUp size={24} className="text-primary" />}
             change={{ value: 3, isPositive: false }}
             className="animate-slide-in [animation-delay:400ms]"
@@ -132,9 +142,9 @@ const Index = () => {
           </div>
           <div>
             <Chart 
-              title="Inventory by Type" 
-              data={inventoryData} 
-              dataKey="count"
+              title="Advertising Costs" 
+              data={advertisingData} 
+              dataKey="cost"
               xAxisDataKey="name"
             />
           </div>

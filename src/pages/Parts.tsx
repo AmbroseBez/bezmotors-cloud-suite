@@ -1,13 +1,22 @@
 
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { Package, Filter, Search } from 'lucide-react';
+import { Package, Filter, Search, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AddPartDialog } from '@/components/parts/AddPartDialog';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
+// Generic vehicle data
+const vehicles = [
+  { id: 'VIN-12345', title: '2022 Tesla Model 3' },
+  { id: 'VIN-67890', title: '2023 BMW X5' },
+  { id: 'VIN-54321', title: '2021 Ford F-150' },
+];
 
 // Mock data for parts
 const partData = [
@@ -18,6 +27,7 @@ const partData = [
     category: 'Engine', 
     price: 12.99, 
     quantity: 45, 
+    vehicleId: null,
     location: 'Shelf A3' 
   },
   { 
@@ -27,6 +37,7 @@ const partData = [
     category: 'Engine', 
     price: 15.99, 
     quantity: 32, 
+    vehicleId: null,
     location: 'Shelf B2' 
   },
   { 
@@ -36,6 +47,7 @@ const partData = [
     category: 'Brakes', 
     price: 45.50, 
     quantity: 18, 
+    vehicleId: 'VIN-12345',
     location: 'Shelf C4' 
   },
   { 
@@ -45,6 +57,7 @@ const partData = [
     category: 'Engine', 
     price: 28.75, 
     quantity: 23, 
+    vehicleId: 'VIN-67890',
     location: 'Shelf A5' 
   },
   { 
@@ -54,6 +67,7 @@ const partData = [
     category: 'Interior', 
     price: 18.25, 
     quantity: 27, 
+    vehicleId: null,
     location: 'Shelf B1' 
   },
   { 
@@ -63,6 +77,7 @@ const partData = [
     category: 'Body', 
     price: 22.99, 
     quantity: 36, 
+    vehicleId: 'VIN-54321',
     location: 'Shelf D3' 
   },
 ];
@@ -70,13 +85,33 @@ const partData = [
 const Parts = () => {
   const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
   
-  // Filter parts based on search query
-  const filteredParts = partData.filter(part => 
-    part.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.partNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    part.category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter parts based on search query, selected vehicle, and active tab
+  const filteredParts = partData.filter(part => {
+    // Filter by search query
+    const matchesSearch = 
+      part.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      part.partNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      part.category.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    // Filter by selected vehicle
+    const matchesVehicle = selectedVehicle ? part.vehicleId === selectedVehicle : true;
+    
+    // Filter by tab
+    const matchesTab = activeTab === 'all' || 
+      (activeTab === 'assigned' && part.vehicleId) || 
+      (activeTab === 'unassigned' && !part.vehicleId);
+    
+    return matchesSearch && matchesVehicle && matchesTab;
+  });
+  
+  const getVehicleName = (vehicleId: string | null) => {
+    if (!vehicleId) return 'Not Assigned';
+    const vehicle = vehicles.find(v => v.id === vehicleId);
+    return vehicle ? vehicle.title : 'Unknown Vehicle';
+  };
   
   return (
     <div className="flex min-h-screen bg-background overflow-hidden">
@@ -96,14 +131,15 @@ const Parts = () => {
               change={{ value: 42, isPositive: true }}
             />
             <StatCard 
-              title="In Stock" 
-              value="987" 
-              icon={<Package size={24} className="text-primary" />}
+              title="Assigned Parts" 
+              value="542" 
+              icon={<Car size={24} className="text-primary" />}
             />
             <StatCard 
-              title="On Order" 
-              value="267" 
+              title="Low Stock Items" 
+              value="38" 
               icon={<Package size={24} className="text-primary" />}
+              change={{ value: 5, isPositive: false }}
             />
           </div>
           
@@ -118,64 +154,116 @@ const Parts = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
+              
+              <div className="w-full md:w-64">
+                <Select 
+                  value={selectedVehicle || ''} 
+                  onValueChange={(value) => setSelectedVehicle(value || null)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Filter by vehicle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="">All Vehicles</SelectItem>
+                    {vehicles.map(vehicle => (
+                      <SelectItem key={vehicle.id} value={vehicle.id}>
+                        {vehicle.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
               <Button variant="outline" size={isMobile ? "sm" : "default"} className="gap-2 w-full md:w-auto">
                 <Filter size={16} />
-                Filters
+                More Filters
               </Button>
             </div>
             
-            {filteredParts.length > 0 ? (
-              <div className="bg-card rounded-lg border w-full overflow-x-auto">
-                <div className="min-w-full">
-                  <table className="min-w-full divide-y divide-border">
-                    <thead>
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">ID</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Name</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Part Number</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Category</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Price</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Quantity</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Location</th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-background divide-y divide-border">
-                      {filteredParts.map((part) => (
-                        <tr key={part.id} className="hover:bg-muted/50">
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{part.id}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">{part.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">{part.partNumber}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">{part.category}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">${part.price.toFixed(2)}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">{part.quantity}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm">{part.location}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
-                            <Button variant="ghost" size="sm">Edit</Button>
-                            <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-card rounded-lg p-4 border w-full text-center py-12">
-                <h3 className="text-xl font-medium mb-2">No Parts Found</h3>
-                <p className="text-muted-foreground">
-                  {searchQuery ? 
-                    "No parts match your search criteria. Try adjusting your filters." :
-                    "No parts are currently in the inventory. Add some parts to get started."
-                  }
-                </p>
-              </div>
-            )}
+            <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+              <TabsList className="mb-6">
+                <TabsTrigger value="all">All Parts</TabsTrigger>
+                <TabsTrigger value="assigned">Assigned to Vehicles</TabsTrigger>
+                <TabsTrigger value="unassigned">Unassigned</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="all" className="mt-0">
+                {renderPartsTable()}
+              </TabsContent>
+              
+              <TabsContent value="assigned" className="mt-0">
+                {renderPartsTable()}
+              </TabsContent>
+              
+              <TabsContent value="unassigned" className="mt-0">
+                {renderPartsTable()}
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
     </div>
   );
+  
+  function renderPartsTable() {
+    return filteredParts.length > 0 ? (
+      <div className="bg-card rounded-lg border w-full overflow-x-auto">
+        <div className="min-w-full">
+          <table className="min-w-full divide-y divide-border">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Name</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Part Number</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Category</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Quantity</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Assigned Vehicle</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">Location</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-background divide-y divide-border">
+              {filteredParts.map((part) => (
+                <tr key={part.id} className="hover:bg-muted/50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">{part.id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{part.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{part.partNumber}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{part.category}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">R{part.price.toFixed(2)}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{part.quantity}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {part.vehicleId ? (
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {getVehicleName(part.vehicleId)}
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">Not Assigned</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">{part.location}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                    <Button variant="ghost" size="sm">Edit</Button>
+                    <Button variant="ghost" size="sm" className="text-destructive">Delete</Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ) : (
+      <div className="bg-card rounded-lg p-4 border w-full text-center py-12">
+        <h3 className="text-xl font-medium mb-2">No Parts Found</h3>
+        <p className="text-muted-foreground">
+          {searchQuery || selectedVehicle ? 
+            "No parts match your search criteria. Try adjusting your filters." :
+            "No parts are currently in the inventory. Add some parts to get started."
+          }
+        </p>
+      </div>
+    );
+  }
 };
 
 export default Parts;
