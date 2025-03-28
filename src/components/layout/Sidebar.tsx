@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
-  Car, BarChart3, Settings, 
+  BarChart3, Settings, 
   Home, Menu, X, DollarSign
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -46,7 +47,6 @@ export function Sidebar() {
   
   const navItems = [
     { icon: Home, label: 'Dashboard', to: '/' },
-    { icon: Car, label: 'Inventory', to: '/inventory' },
     { icon: DollarSign, label: 'Advertising', to: '/advertising' },
     { icon: BarChart3, label: 'Reports', to: '/reports' },
   ];
@@ -59,7 +59,7 @@ export function Sidebar() {
       <div className="flex items-center justify-between p-4 border-b">
         {!collapsed && (
           <div className="flex items-center gap-2">
-            <Car size={24} className="text-primary" />
+            <DollarSign size={24} className="text-primary" />
             <h1 className="font-semibold text-lg">BezMegaMotors</h1>
           </div>
         )}

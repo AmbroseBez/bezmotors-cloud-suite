@@ -2,12 +2,10 @@
 import React from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { StatCard } from '@/components/dashboard/StatCard';
-import { VehicleCard } from '@/components/dashboard/VehicleCard';
 import { Chart } from '@/components/dashboard/Chart';
-import { Car, DollarSign, TrendingUp, Search, Bell, Filter, Plus } from 'lucide-react';
+import { DollarSign, TrendingUp, Search, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 // Reset mock data with generic placeholders
@@ -18,48 +16,6 @@ const salesData = [
   { name: 'Apr', sales: 48 },
   { name: 'May', sales: 61 },
   { name: 'Jun', sales: 65 },
-];
-
-const inventoryData = [
-  { name: 'SUV', count: 12 },
-  { name: 'Sedan', count: 19 },
-  { name: 'Truck', count: 8 },
-  { name: 'Sport', count: 5 },
-  { name: 'Luxury', count: 7 },
-];
-
-// Generic vehicle data without specific images
-const vehicles = [
-  {
-    id: 'VIN-12345',
-    title: '2022 Tesla Model 3',
-    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
-    price: 42990,
-    year: 2022,
-    mileage: 12500,
-    fuelType: 'Electric',
-    status: 'In Stock' as const,
-  },
-  {
-    id: 'VIN-67890',
-    title: '2023 BMW X5',
-    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
-    price: 65750,
-    year: 2023,
-    mileage: 8200,
-    fuelType: 'Gasoline',
-    status: 'Reserved' as const,
-  },
-  {
-    id: 'VIN-54321',
-    title: '2021 Ford F-150',
-    image: 'https://placehold.co/600x400/e4e4e7/71717a?text=Vehicle+Image',
-    price: 48500,
-    year: 2021,
-    mileage: 15800,
-    fuelType: 'Diesel',
-    status: 'Sold' as const,
-  },
 ];
 
 // Add advertising cost data
@@ -100,14 +56,7 @@ const Index = () => {
           </div>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
-          <StatCard 
-            title="Total Vehicles" 
-            value="124"
-            icon={<Car size={24} className="text-primary" />}
-            change={{ value: 12, isPositive: true }}
-            className="animate-slide-in [animation-delay:100ms]"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
           <StatCard 
             title="Monthly Revenue" 
             value="R258,430"
@@ -124,8 +73,8 @@ const Index = () => {
           />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
+          <div>
             <Chart 
               title="Monthly Sales Performance" 
               data={salesData} 
@@ -142,88 +91,6 @@ const Index = () => {
               xAxisDataKey="name"
             />
           </div>
-        </div>
-        
-        <div>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
-            <h2 className="text-xl md:text-2xl font-semibold">Recent Inventory</h2>
-            <div className="flex gap-2 w-full md:w-auto">
-              <Button variant="outline" size="sm" className="flex-1 md:flex-initial">
-                <Filter size={16} className="mr-2" />
-                Filter
-              </Button>
-              <Button size="sm" className="flex-1 md:flex-initial">
-                <Plus size={16} className="mr-2" />
-                Add Vehicle
-              </Button>
-            </div>
-          </div>
-          
-          <Tabs defaultValue="all">
-            <TabsList className="mb-6 w-full overflow-x-auto">
-              <TabsTrigger value="all">All Vehicles</TabsTrigger>
-              <TabsTrigger value="in-stock">In Stock</TabsTrigger>
-              <TabsTrigger value="reserved">Reserved</TabsTrigger>
-              <TabsTrigger value="sold">Sold</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="all" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {vehicles.map((vehicle, index) => (
-                  <VehicleCard 
-                    key={vehicle.id} 
-                    vehicle={vehicle}
-                    className={`animate-fade-in [animation-delay:${index*100}ms]`}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="in-stock" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {vehicles
-                  .filter(v => v.status === 'In Stock')
-                  .map((vehicle, index) => (
-                    <VehicleCard 
-                      key={vehicle.id} 
-                      vehicle={vehicle}
-                      className={`animate-fade-in [animation-delay:${index*100}ms]`}
-                    />
-                  ))
-                }
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="reserved" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {vehicles
-                  .filter(v => v.status === 'Reserved')
-                  .map((vehicle, index) => (
-                    <VehicleCard 
-                      key={vehicle.id} 
-                      vehicle={vehicle}
-                      className={`animate-fade-in [animation-delay:${index*100}ms]`}
-                    />
-                  ))
-                }
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="sold" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                {vehicles
-                  .filter(v => v.status === 'Sold')
-                  .map((vehicle, index) => (
-                    <VehicleCard 
-                      key={vehicle.id} 
-                      vehicle={vehicle}
-                      className={`animate-fade-in [animation-delay:${index*100}ms]`}
-                    />
-                  ))
-                }
-              </div>
-            </TabsContent>
-          </Tabs>
         </div>
       </div>
     </div>
