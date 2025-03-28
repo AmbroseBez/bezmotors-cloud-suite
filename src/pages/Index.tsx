@@ -4,7 +4,7 @@ import { Sidebar } from '@/components/layout/Sidebar';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { VehicleCard } from '@/components/dashboard/VehicleCard';
 import { Chart } from '@/components/dashboard/Chart';
-import { Car, DollarSign, Package, TrendingUp, Search, Bell, Filter, Plus } from 'lucide-react';
+import { Car, DollarSign, TrendingUp, Search, Bell, Filter, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -100,7 +100,7 @@ const Index = () => {
           </div>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
           <StatCard 
             title="Total Vehicles" 
             value="124"
@@ -114,13 +114,6 @@ const Index = () => {
             icon={<DollarSign size={24} className="text-primary" />}
             change={{ value: 8.5, isPositive: true }}
             className="animate-slide-in [animation-delay:200ms]"
-          />
-          <StatCard 
-            title="Parts Inventory" 
-            value="1,245"
-            icon={<Package size={24} className="text-primary" />}
-            change={{ value: 5, isPositive: true }}
-            className="animate-slide-in [animation-delay:300ms]"
           />
           <StatCard 
             title="Ad Spend" 
@@ -144,6 +137,7 @@ const Index = () => {
             <Chart 
               title="Advertising Costs" 
               data={advertisingData} 
+              type="bar"
               dataKey="cost"
               xAxisDataKey="name"
             />
