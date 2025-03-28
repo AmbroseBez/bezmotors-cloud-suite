@@ -3,10 +3,12 @@ import React from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { Chart } from '@/components/dashboard/Chart';
-import { DollarSign, TrendingUp, Search, Bell } from 'lucide-react';
+import { DollarSign, TrendingUp, Search, Bell, Car } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Link } from 'react-router-dom';
+import { VehicleCard } from '@/components/dashboard/VehicleCard';
 
 // Reset mock data with generic placeholders
 const salesData = [
@@ -25,6 +27,30 @@ const advertisingData = [
   { name: 'Print', cost: 950 },
   { name: 'TV/Radio', cost: 3200 },
   { name: 'Events', cost: 1200 },
+];
+
+// Sample vehicles data
+const featuredVehicles = [
+  {
+    id: 'VIN-12345',
+    title: '2022 Tesla Model 3',
+    image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80',
+    price: 42990,
+    year: 2022,
+    mileage: 12500,
+    fuelType: 'Electric',
+    status: 'In Stock' as const,
+  },
+  {
+    id: 'VIN-67890',
+    title: '2023 BMW X5',
+    image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    price: 65750,
+    year: 2023,
+    mileage: 8200,
+    fuelType: 'Gasoline',
+    status: 'Reserved' as const,
+  },
 ];
 
 const Index = () => {
@@ -56,7 +82,7 @@ const Index = () => {
           </div>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
           <StatCard 
             title="Monthly Revenue" 
             value="R258,430"
@@ -70,6 +96,13 @@ const Index = () => {
             icon={<TrendingUp size={24} className="text-primary" />}
             change={{ value: 3, isPositive: false }}
             className="animate-slide-in [animation-delay:400ms]"
+          />
+          <StatCard 
+            title="Vehicles in Stock" 
+            value="124"
+            icon={<Car size={24} className="text-primary" />}
+            change={{ value: 5, isPositive: true }}
+            className="animate-slide-in [animation-delay:600ms]"
           />
         </div>
         
@@ -90,6 +123,28 @@ const Index = () => {
               dataKey="cost"
               xAxisDataKey="name"
             />
+          </div>
+        </div>
+        
+        <div className="mb-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-bold">Featured Vehicles</h2>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/inventory" className="flex items-center gap-2">
+                <Car size={16} />
+                View All Inventory
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+            {featuredVehicles.map((vehicle, index) => (
+              <VehicleCard 
+                key={vehicle.id} 
+                vehicle={vehicle}
+                className={`animate-fade-in [animation-delay:${index*100}ms]`}
+              />
+            ))}
           </div>
         </div>
       </div>

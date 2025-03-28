@@ -3,7 +3,7 @@ import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   BarChart3, Settings, 
-  Home, Menu, X, DollarSign
+  Home, Menu, X, DollarSign, Car
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -47,6 +47,7 @@ export function Sidebar() {
   
   const navItems = [
     { icon: Home, label: 'Dashboard', to: '/' },
+    { icon: Car, label: 'Inventory', to: '/inventory' },
     { icon: DollarSign, label: 'Advertising', to: '/advertising' },
     { icon: BarChart3, label: 'Reports', to: '/reports' },
   ];
