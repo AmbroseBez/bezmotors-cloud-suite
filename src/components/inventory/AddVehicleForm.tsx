@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +17,8 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
+import { ImageUpload } from '@/components/ui/image-upload';
+import { Image } from 'lucide-react';
 
 const vehicleSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
@@ -27,6 +29,7 @@ const vehicleSchema = z.object({
   status: z.enum(["In Stock", "Reserved", "Sold"]),
   vin: z.string().min(3, { message: "VIN must be at least 3 characters." }),
   description: z.string().optional(),
+  images: z.array(z.string()).optional(),
 });
 
 type VehicleFormValues = z.infer<typeof vehicleSchema>;
@@ -50,6 +53,7 @@ export function AddVehicleForm({ onSuccess, onCancel }: AddVehicleFormProps) {
       status: 'In Stock',
       vin: '',
       description: '',
+      images: [],
     },
   });
 
@@ -59,7 +63,7 @@ export function AddVehicleForm({ onSuccess, onCancel }: AddVehicleFormProps) {
     
     toast({
       title: "Vehicle Added",
-      description: `${data.title} has been added to inventory.`,
+      description: `${data.title} has been added to inventory with ${data.images?.length || 0} images.`,
     });
     
     if (onSuccess) onSuccess();
@@ -79,6 +83,29 @@ export function AddVehicleForm({ onSuccess, onCancel }: AddVehicleFormProps) {
               </FormControl>
               <FormDescription>
                 Make, model and trim of the vehicle.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="flex items-center gap-2">
+                <Image size={16} /> Vehicle Images
+              </FormLabel>
+              <FormControl>
+                <ImageUpload 
+                  value={field.value || []} 
+                  onChange={field.onChange}
+                  maxImages={5}
+                />
+              </FormControl>
+              <FormDescription>
+                Upload up to 5 images of the vehicle. The first image will be used as the main image.
               </FormDescription>
               <FormMessage />
             </FormItem>

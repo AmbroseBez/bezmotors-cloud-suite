@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
-import { Car, Filter, Search } from 'lucide-react';
+import { Car, Filter, Image, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { StatCard } from '@/components/dashboard/StatCard';
@@ -15,6 +15,10 @@ const vehicles = [
     id: 'VIN-12345',
     title: '2022 Tesla Model 3',
     image: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1560958089-b8a1929cea89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80',
+      'https://images.unsplash.com/photo-1617788138017-80ad40651399?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    ],
     price: 42990,
     year: 2022,
     mileage: 12500,
@@ -25,6 +29,9 @@ const vehicles = [
     id: 'VIN-67890',
     title: '2023 BMW X5',
     image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    ],
     price: 65750,
     year: 2023,
     mileage: 8200,
@@ -35,6 +42,9 @@ const vehicles = [
     id: 'VIN-54321',
     title: '2021 Ford F-150',
     image: 'https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+    images: [
+      'https://images.unsplash.com/photo-1605893477799-b99e3b8b93fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80'
+    ],
     price: 48500,
     year: 2021,
     mileage: 15800,
