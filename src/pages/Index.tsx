@@ -3,7 +3,7 @@ import React from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { StatCard } from '@/components/dashboard/StatCard';
 import { Chart } from '@/components/dashboard/Chart';
-import { DollarSign, TrendingUp, Search, Bell, Car } from 'lucide-react';
+import { DollarSign, TrendingUp, Search, Bell, Car, Clock, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -27,6 +27,15 @@ const advertisingData = [
   { name: 'Print', cost: 950 },
   { name: 'TV/Radio', cost: 3200 },
   { name: 'Events', cost: 1200 },
+];
+
+// Add vehicle performance data
+const vehiclePerformanceData = [
+  { name: 'SUV', avgSellTime: 28 },
+  { name: 'Sedan', avgSellTime: 35 },
+  { name: 'Luxury', avgSellTime: 25 },
+  { name: 'Electric', avgSellTime: 21 },
+  { name: 'Truck', avgSellTime: 42 },
 ];
 
 // Sample vehicles data
@@ -82,7 +91,7 @@ const Index = () => {
           </div>
         </header>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6 mb-6">
           <StatCard 
             title="Monthly Revenue" 
             value="R258,430"
@@ -104,10 +113,17 @@ const Index = () => {
             change={{ value: 5, isPositive: true }}
             className="animate-slide-in [animation-delay:600ms]"
           />
+          <StatCard 
+            title="Avg. Days to Sell" 
+            value="32"
+            icon={<Clock size={24} className="text-primary" />}
+            change={{ value: 15, isPositive: true }}
+            className="animate-slide-in [animation-delay:800ms]"
+          />
         </div>
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mb-6">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-6">
+          <div className="lg:col-span-1">
             <Chart 
               title="Monthly Sales Performance" 
               data={salesData} 
@@ -115,7 +131,7 @@ const Index = () => {
               dataKey="sales"
             />
           </div>
-          <div>
+          <div className="lg:col-span-1">
             <Chart 
               title="Advertising Costs" 
               data={advertisingData} 
@@ -124,17 +140,34 @@ const Index = () => {
               xAxisDataKey="name"
             />
           </div>
+          <div className="lg:col-span-1">
+            <Chart 
+              title="Avg. Days to Sell by Type" 
+              data={vehiclePerformanceData} 
+              type="bar"
+              dataKey="avgSellTime"
+              xAxisDataKey="name"
+            />
+          </div>
         </div>
         
         <div className="mb-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Featured Vehicles</h2>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/inventory" className="flex items-center gap-2">
-                <Car size={16} />
-                View All Inventory
-              </Link>
-            </Button>
+            <div className="flex gap-2">
+              <Button asChild variant="outline" size="sm">
+                <Link to="/inventory" className="flex items-center gap-2">
+                  <Car size={16} />
+                  Inventory
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/analytics" className="flex items-center gap-2">
+                  <BarChart3 size={16} />
+                  Full Analytics
+                </Link>
+              </Button>
+            </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
